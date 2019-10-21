@@ -1,10 +1,10 @@
-import keras
-from keras import backend as K
-from keras.models import Sequential, Model
-from keras.layers import Input, LSTM, RepeatVector
-from keras.layers.core import Flatten, Dense, Dropout, Lambda
-from keras.optimizers import SGD, RMSprop, Adam
-from keras import objectives
+import tensorflow as tf
+from tensorflow.keras import backend as K
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Input, LSTM, RepeatVector
+from tensorflow.keras.layers import Flatten, Dense, Dropout, Lambda
+from tensorflow.keras.optimizers import SGD, RMSprop, Adam
+from tensorflow.keras import metrics
 
 
 def create_lstm_vae(input_dim, 
@@ -75,7 +75,7 @@ def create_lstm_vae(input_dim,
     generator = Model(decoder_input, _x_decoded_mean)
     
     def vae_loss(x, x_decoded_mean):
-        xent_loss = objectives.mse(x, x_decoded_mean)
+        xent_loss = metrics.mse(x, x_decoded_mean)
         kl_loss = - 0.5 * K.mean(1 + z_log_sigma - K.square(z_mean) - K.exp(z_log_sigma))
         loss = xent_loss + kl_loss
         return loss
